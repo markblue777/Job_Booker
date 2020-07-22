@@ -1,0 +1,2 @@
+# Job_Booker
+An application built in .net core 3.1 and .net standard to allow for the tracking of hourly based services. It is designed to aid the self employed by managing customers and hourly rates, manage bookings and get accountancy figures for use when UK self assessment accounts are needed. On the road map is to bring in online payment, front end exposure for customers to put bookings in them selves.
