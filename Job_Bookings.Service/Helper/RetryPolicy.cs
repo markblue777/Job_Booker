@@ -29,19 +29,26 @@ namespace Job_Bookings.Services.Helper
             _config = config;
             _logger = logger;
 
-            _retryPolicyAsync = Policy.Handle<SqlException>()
+            //TODO: change so the policy config is injected to allow more use cases
+            _retryPolicyAsync = Policy.Handle<Exception>()
                 .WaitAndRetryAsync(
-                    retryCount:int.Parse(_config["retryAmmount"]),
-                    sleepDurationProvider: attempt =>TimeSpan.FromMilliseconds(int.Parse(_config["retryPause"])),
-                    onRetry:(exception, attempt) => {
-                        _logger.LogWarning($"Retry Count: {attempt} : Message: {exception.Message}");
+                    retryCount:int.Parse(_config["retryAmount"]),
+                    sleepDurationProvider: attempt => TimeSpan.FromMilliseconds(int.Parse(_config["retryPause"])),
+                    onRetry:(response, delay, retryCount, context) => {
+                        _logger.LogWarning($"Connection Failure - Attempt: {retryCount}, Due to - Message: {response.Message}");
                     }
                 );
         }
 
         public async Task<TResult> Do<TResult>(Func<Task<TResult>> retryFunc)
         {
-            return await _retryPolicyAsync.ExecuteAsync(retryFunc.Invoke);
+            try
+            {
+                return await _retryPolicyAsync.ExecuteAsync(retryFunc.Invoke);
+            }
+            catch {
+                return (TResult)Convert.ChangeType(null, typeof(TResult));
+            }
         }
     }
 }
