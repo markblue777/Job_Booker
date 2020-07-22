@@ -43,33 +43,36 @@ namespace Job_Bookings.Tests
         [Test]
         public async Task RetryLogic_Success_Test() 
         {
-            ////Arrange
-            //Customer cust = new Customer();
-            //Guid customerGuid = Guid.NewGuid();
-            //Guid userGuid = Guid.NewGuid();
-            //_custRepo.Setup(x => x.GetCustomer(userGuid, customerGuid)).ReturnsAsync(cust);
+            //Arrange
+            Customer cust = new Customer();
+            Guid customerGuid = Guid.NewGuid();
+            Guid userGuid = Guid.NewGuid();
+            _custRepo.Setup(x => x.GetCustomer(userGuid, customerGuid)).ReturnsAsync(cust);
             
-            ////Func<Task<Customer>> remCust = () => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); };
- 
-            ////Act
-            //var res = await _retryPolicy.Do(() => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); });
+            //Act
+            var res = await _retryPolicy.Do(() => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); });
 
-            ////Assert
+            //Assert
 
-            //Assert.IsNotNull(res);
+            Assert.IsNotNull(res);
         }
 
         [Test]
         public async Task RetryLogic_SuccessAfterNRetry_Test()
         {
             //Arrange
+            Customer cust = new Customer();
             Guid customerGuid = Guid.NewGuid();
             Guid userGuid = Guid.NewGuid();
-            //do this but change return so it sends back sql exception and then a valid response
-            //_custRepo.Setup(x => x.GetCustomer(userGuid, customerGuid)).ReturnsAsync(cust);
+            _custRepo.SetupSequence(x => x.GetCustomer(userGuid, customerGuid)).ThrowsAsync(new Exception()).ThrowsAsync(new Exception()).ReturnsAsync(cust);
+
             //Act
+            var res = await _retryPolicy.Do(() => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); });
 
             //Assert
+            Assert.IsNotNull(res);
+            _custRepo.Verify(x => x.GetCustomer(userGuid, customerGuid), Times.Exactly(3));
+
 
         }
 
@@ -81,12 +84,11 @@ namespace Job_Bookings.Tests
             Guid userGuid = Guid.NewGuid();
             //do this but change return so it just sends back sql exceptions
             _custRepo.Setup(x => x.GetCustomer(userGuid, customerGuid)).ThrowsAsync(new Exception());
-            //Act
             
+            //Act
             var res = await _retryPolicy.Do(() => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); });
 
             //Assert
-
             Assert.IsNull(res);
             
             //it does the initial call, then 3 retries
