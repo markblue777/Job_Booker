@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
+using Newtonsoft.Json;
 
 namespace Job_Bookings
 {
@@ -27,7 +28,10 @@ namespace Job_Bookings
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(op => {
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings() { DateFormatString = "yyyy-MM-ddTHH:mm:ss" };
+            });
+            
 
             //Singletons
             services.AddSingleton<IRetryPolicy, RetryPolicy>();
@@ -62,6 +66,7 @@ namespace Job_Bookings
             app.UseRouting();
 
             app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

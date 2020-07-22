@@ -20,9 +20,8 @@ namespace Job_Bookings.Services
 
         public async Task<bool> AddAppointment(Appointment app)
         {
-            JsonSerializerSettings dateFormatterSettings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss" };
             var sqlParams = new List<SqlParameter>();
-            sqlParams.Add(new SqlParameter() { ParameterName = "@json", Value = JsonConvert.SerializeObject(app, dateFormatterSettings) });
+            sqlParams.Add(new SqlParameter() { ParameterName = "@json", Value = JsonConvert.SerializeObject(app) });
             var res = await ExecuteWriterAsync("dbo.AddAppointment", sqlParams);
 
             return res;
