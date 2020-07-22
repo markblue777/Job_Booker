@@ -8,9 +8,11 @@ namespace Job_Bookings.Models
 {
     public class Appointment : BaseModel
     {
-        public Appointment():base() { }
+        public Appointment():base() {
+            AppointmentGuid = Guid.NewGuid();
+            BookingCancelled = false;
+        }
 
-        public int AppointmentId { get; set; }
         public Guid AppointmentGuid { get; set; }
         public DateTime AppointmentDateTime { get; set; }
         public double AppointmentLength { get; set; }
@@ -19,9 +21,9 @@ namespace Job_Bookings.Models
         public string Notes { get; set; }
         public decimal MaterialCosts { get; set; }
         public decimal AdditionalCosts { get; set; }
-        public decimal ExpectedTotal { get; set; }
         public Guid PaymentTypeGuid { get; set; }
         public bool BookingCancelled { get; set; }
         public Guid RateGuid { get; set; }
+        public decimal ExpectedTotal { get; set; }
     }
 }

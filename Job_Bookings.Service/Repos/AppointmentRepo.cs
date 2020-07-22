@@ -2,8 +2,10 @@
 using Job_Bookings.Services.Helper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,9 +18,14 @@ namespace Job_Bookings.Services
 
         }
 
-        public Task<bool> AddAppointment(Appointment app)
+        public async Task<bool> AddAppointment(Appointment app)
         {
-            throw new NotImplementedException();
+            JsonSerializerSettings dateFormatterSettings = new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss" };
+            var sqlParams = new List<SqlParameter>();
+            sqlParams.Add(new SqlParameter() { ParameterName = "@json", Value = JsonConvert.SerializeObject(app, dateFormatterSettings) });
+            var res = await ExecuteWriterAsync("dbo.AddAppointment", sqlParams);
+
+            return res;
         }
 
         public Task<bool> DeleteAppointment(Guid appGuid)

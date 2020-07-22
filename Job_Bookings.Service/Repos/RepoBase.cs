@@ -85,7 +85,7 @@ namespace Job_Bookings.Services
                 return recordsAffected > 0 ? true : false;
             });
 
-            return false;
+            return rtnVal;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Job_Bookings.Models
     {
         public BaseModel()
         {
+            DateCreated = DateTime.UtcNow;
             DateUpdated = null;
         }
 

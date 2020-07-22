@@ -10,7 +10,7 @@
 	[paymentTypeId] [bigint] NULL,
 	[bookingCancelled] [bit] NULL,
 	[dateCreated] [datetime] NULL,
-	[DateEnded] [datetime] NULL,
+	[dateUpdated] [datetime] NULL,
 	[appointmentGuid] [uniqueidentifier] NOT NULL,
 	[ratesId] [bigint] NOT NULL,
 	[expectedTotal] [money] NULL,

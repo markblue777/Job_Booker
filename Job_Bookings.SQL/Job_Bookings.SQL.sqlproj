@@ -71,6 +71,9 @@
     <Build Include="Stored Procedures\AddAppointment.sql" />
     <Build Include="Functions\GetUserId.sql" />
     <Build Include="Functions\GetCustomerId.sql" />
+    <Build Include="Functions\GetRateId.sql" />
+    <Build Include="Functions\GetAppointmentId.sql" />
+    <Build Include="Functions\GetPaymentTypeId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Job_Bookings.SQL.refactorlog" />
