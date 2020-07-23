@@ -17,3 +17,5 @@ PRIMARY KEY CLUSTERED
 )
 ) ON [PRIMARY]
 GO
+
+--TODO: implement foreign key constraints where appropriate

@@ -20,3 +20,5 @@ PRIMARY KEY CLUSTERED
 	[customerId] ASC
 )
 ) ON [PRIMARY]
+
+--TODO: implement foreign key constraints where appropriate

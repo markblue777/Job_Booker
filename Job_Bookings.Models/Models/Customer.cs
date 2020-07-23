@@ -35,14 +35,5 @@ namespace Job_Bookings.Models
         //the latest rate for the customer
         public List<Rate> Rates { get; set; }
         public bool Archived { get; set; }
-
-        public List<SqlParameter> GenerateSQLParams()
-        {
-            List<SqlParameter> sqlParams = new List<SqlParameter>();
-
-
-            return sqlParams;
-        }
-
     }
 }

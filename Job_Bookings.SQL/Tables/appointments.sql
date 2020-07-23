@@ -20,3 +20,5 @@ PRIMARY KEY CLUSTERED
 )
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
+
+--TODO: implement foreign key constraints where appropriate
