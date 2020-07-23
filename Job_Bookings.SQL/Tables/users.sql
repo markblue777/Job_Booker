@@ -11,7 +11,9 @@
 	[dateupdated] [datetime] NULL,
 	[userGuid] [uniqueidentifier] NULL,
 	[timezone] [nvarchar](255) NULL,
-PRIMARY KEY CLUSTERED 
+[firstname] NVARCHAR(50) NULL, 
+    [lastname] NVARCHAR(50) NULL, 
+    PRIMARY KEY CLUSTERED 
 (
 	[userId] ASC
 )

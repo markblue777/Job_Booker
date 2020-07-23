@@ -76,8 +76,12 @@
     <Build Include="Functions\GetPaymentTypeId.sql" />
     <Build Include="Stored Procedures\AddCustomer.sql" />
     <Build Include="Stored Procedures\AddRate.sql" />
+    <Build Include="Functions\GeneratedExpectedTotal.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Job_Bookings.SQL.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Database_Relational_Design.png" />
   </ItemGroup>
 </Project>

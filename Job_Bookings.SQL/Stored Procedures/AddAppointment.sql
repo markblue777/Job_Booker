@@ -30,7 +30,7 @@ AS
 		[dbo].[GetPaymentTypeId](paymentTypeGuid),
 		bookingCancelled,
 		[dbo].[GetRateId](rateGuid),
-		expectedTotal,
+		[dbo].GeneratedExpectedTotal(AppointmentLength, MaterialCosts, AdditionalCosts, RateGuid),
 		dateCreated,
 		dateUpdated
 	FROM OPENJSON(@json)
