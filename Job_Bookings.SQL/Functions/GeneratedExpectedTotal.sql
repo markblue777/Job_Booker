@@ -13,7 +13,7 @@ BEGIN
 	DECLARE @rateId BIGINT;
 	DECLARE @hourlyRate MONEY;
 	
-	exec @rateId = dbo.GetRateId @rateGuid = @rateGuid
+	exec @rateId = dbo.GetRateId @RateGuid = @rateGuid
 
 	SELECT @hourlyRate = hourlyrate FROM customerrates where ratesId = @rateId
 
