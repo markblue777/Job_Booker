@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Job_Bookings.Services;
 using Job_Bookings.Services.Helper;
+using Job_Bookings.Services.Repos;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -39,11 +40,14 @@ namespace Job_Bookings
             //Repos
             services.AddTransient<ICustomerRepo, CustomerRepo>();
             services.AddTransient<IAppointmentRepo, AppointmentRepo>();
+            services.AddTransient<ICustomerRatesRepo, CustomerRatesRepo>();
+            services.AddTransient<IUserRepo, UserRepo>();
 
             //Services
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<IAppointmentService, AppointmentService>();
-            
+            services.AddTransient<ICustomerRatesService, CustomerRatesService>();
+            services.AddTransient<IUserService, UserService>();
 
         }
 

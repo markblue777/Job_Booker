@@ -23,7 +23,7 @@ namespace Job_Bookings.Services
         Task<List<Appointment>> GetAllAppointments(Guid userGuid);
 
         /// <summary>
-        /// Get all appointments for a specific month and year, for a specific user. If dayOnly = true then it returns only the appointments for the specific date.
+        /// Get all appointments for a specific month and year, for a specific user. If dayOnly = true then it returns only the appointments for the specific date passed.
         /// </summary>
         /// <returns>List of appointments</returns>
         Task<List<Appointment>> GetAppointmentsByDate(DateTime dt, Guid userGuid, bool dayOnly = false);

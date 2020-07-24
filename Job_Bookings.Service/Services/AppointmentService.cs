@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Job_Bookings.Services
 {
-    public class AppointmentService : IAppointmentService
+    public class AppointmentService : BaseService<AppointmentService>, IAppointmentService
     {
         IAppointmentRepo _appointmentRepo;
-        ILogger<AppointmentService> _logger;
+
         public AppointmentService(IAppointmentRepo appointmentRepo, ILogger<AppointmentService> logger)
         {
             _appointmentRepo = appointmentRepo;

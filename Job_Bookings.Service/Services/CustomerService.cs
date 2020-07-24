@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Job_Bookings.Services
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService : BaseService<CustomerService>, ICustomerService
     {
-        ICustomerRepo _custRepo;
-        ILogger<CustomerService> _logger;
+        ICustomerRepo _custRepo;        
 
         public CustomerService(ICustomerRepo custRepo, ILogger<CustomerService> logger)
         {
