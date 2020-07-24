@@ -8,6 +8,3 @@ Front end login for customers to:
   
   
 I hope to release this as a SAAS based model to minimize complexity.
-
-
-**NOTE: CURRENTLY IN TO PROCESS OF TRANSFERRING FROM Azure DevOps to Github.
