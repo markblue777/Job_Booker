@@ -1,7 +1,6 @@
 ﻿using Job_Bookings.Models;
 using Job_Bookings.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -57,7 +56,6 @@ namespace Job_Bookings.Tests
             {
                 CustomerGuid = Guid.NewGuid(),
                 AppointmentGuid = _appointmentOne,
-                AppointmentId = 1,
                 AdditionalCosts = decimal.Parse("12.75"),
                 AppointmentDateTime = new DateTime(2020, 7, 6, 10, 0, 0),
                 AppointmentLength = 2.5,
@@ -75,7 +73,6 @@ namespace Job_Bookings.Tests
             {
                 CustomerGuid = Guid.NewGuid(),
                 AppointmentGuid = _appointmentTwo,
-                AppointmentId = 2,
                 AdditionalCosts = decimal.Parse("0"),
                 AppointmentDateTime = new DateTime(2020, 7, 10, 10, 0, 0),
                 AppointmentLength = 3,
@@ -93,7 +90,6 @@ namespace Job_Bookings.Tests
             {
                 CustomerGuid = Guid.NewGuid(),
                 AppointmentGuid = _appointmentThree,
-                AppointmentId = 3,
                 AdditionalCosts = decimal.Parse("0"),
                 AppointmentDateTime = new DateTime(2020, 7, 6, 14, 0, 0),
                 AppointmentLength = 1,
@@ -112,7 +108,6 @@ namespace Job_Bookings.Tests
             {
                 CustomerGuid = Guid.NewGuid(),
                 AppointmentGuid = Guid.NewGuid(),
-                AppointmentId = 3,
                 AdditionalCosts = decimal.Parse("0"),
                 AppointmentDateTime = new DateTime(2020, 6, 6, 14, 0, 0),
                 AppointmentLength = 1,
@@ -192,7 +187,6 @@ namespace Job_Bookings.Tests
             {
                 CustomerGuid = Guid.NewGuid(),
                 AppointmentGuid = _appointmentFour,
-                AppointmentId = 4,
                 AdditionalCosts = decimal.Parse("0"),
                 AppointmentDateTime = new DateTime(2020, 6, 6, 14, 0, 0),
                 AppointmentLength = 1,
@@ -227,7 +221,6 @@ namespace Job_Bookings.Tests
             {
                 CustomerGuid = Guid.NewGuid(),
                 AppointmentGuid = _appointmentFour,
-                AppointmentId = 4,
                 AdditionalCosts = decimal.Parse("0"),
                 AppointmentDateTime = new DateTime(2020, 6, 6, 14, 0, 0),
                 AppointmentLength = 1,
@@ -245,7 +238,6 @@ namespace Job_Bookings.Tests
             {
                 CustomerGuid = Guid.NewGuid(),
                 AppointmentGuid = _appointmentFour,
-                AppointmentId = 4,
                 AdditionalCosts = decimal.Parse("20.75"),
                 AppointmentDateTime = new DateTime(2020, 6, 6, 10, 0, 0),
                 AppointmentLength = 3,
