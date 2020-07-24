@@ -13,11 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job_Bookings.Services", "Jo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job_Bookings.Models", "Job_Bookings.Models\Job_Bookings.Models.csproj", "{99599679-27AB-4E52-B624-E482FE39C25A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Info", "Info", "{F5B00FDA-04EB-48CC-A52D-6B20FBDBF3B0}"
-	ProjectSection(SolutionItems) = preProject
-		C:\Users\markd\Desktop\JobBooker_UI_WIP.pdf = C:\Users\markd\Desktop\JobBooker_UI_WIP.pdf
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
