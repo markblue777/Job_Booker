@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Job_Bookings.Services
 {
-    public class AppointmentRepo : RepoBase, IAppointmentRepo
+    public class AppointmentRepo : RepoBase<AppointmentRepo>, IAppointmentRepo
     {
-        public AppointmentRepo(IConfiguration config, ILogger<RepoBase> logger, IRetryPolicy retryPolicy) : base(config, logger, retryPolicy)
+        public AppointmentRepo(IConfiguration config, ILogger<AppointmentRepo> logger, IRetryPolicy retryPolicy) : base(config, logger, retryPolicy)
         {
 
         }

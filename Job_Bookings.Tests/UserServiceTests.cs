@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Job_Bookings.Services
+namespace Job_Bookings.Tests
 {
-    public interface IUserRepo
+    public class UserServiceTests
     {
     }
 }

@@ -3,6 +3,7 @@ using Job_Bookings.Models.DTOs;
 using Job_Bookings.Services.Helper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -10,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Job_Bookings.Services
 {
-    public class CustomerRepo : RepoBase, ICustomerRepo
+    public class CustomerRepo : RepoBase<CustomerRepo>, ICustomerRepo
     {
 
-        public CustomerRepo(IConfiguration config, ILogger<RepoBase> logger, IRetryPolicy retryPolicy) : base(config, logger, retryPolicy)
+        public CustomerRepo(IConfiguration config, ILogger<CustomerRepo> logger, IRetryPolicy retryPolicy) : base(config, logger, retryPolicy)
         {
 
         }
@@ -39,7 +40,8 @@ namespace Job_Bookings.Services
         public async Task<bool> AddCustomer(Customer cust)
         {
             var sqlParams = new List<SqlParameter>();
-
+            sqlParams.Add(new SqlParameter("json", JsonConvert.SerializeObject(cust)));
+            
             var res = await ExecuteWriterAsync("dbo.AddCustomer", sqlParams);
             
             return res;

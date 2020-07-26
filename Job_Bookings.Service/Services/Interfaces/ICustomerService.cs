@@ -12,7 +12,6 @@ namespace Job_Bookings.Services
         Task<List<Customer>> ListCustomers(Guid userGuid, bool onlyActive = true);
         Task<Customer> GetCustomer(Guid userGuid, Guid customerGuid);
         Task<bool> AddCustomer(Customer cust);
-        
         Task<Customer> UpdateCustomer(Customer cust);
     }
 }

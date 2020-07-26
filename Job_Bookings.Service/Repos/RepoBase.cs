@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Job_Bookings.Services
 {
-    public abstract class RepoBase
+    public abstract class RepoBase<TBase> where TBase : RepoBase<TBase>
     {
         protected readonly IConfiguration _config;
-        protected readonly ILogger<RepoBase> _logger;
+        protected readonly ILogger<TBase> _logger;
         protected readonly IRetryPolicy _retryPolicy;
 
         private readonly int _timeout;
@@ -22,7 +22,7 @@ namespace Job_Bookings.Services
 
         protected SqlConnection _conn { get; set; }
 
-        public RepoBase(IConfiguration config, ILogger<RepoBase> logger, IRetryPolicy retryPolicy)
+        public RepoBase(IConfiguration config, ILogger<TBase> logger, IRetryPolicy retryPolicy)
         {
             _config = config;
             _logger = logger;

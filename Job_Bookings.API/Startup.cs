@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
-namespace Job_Bookings
+namespace Job_Bookings.API
 {
     public class Startup
     {
@@ -21,10 +21,10 @@ namespace Job_Bookings
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddJsonOptions(op => {
+            services.AddControllers().AddJsonOptions(op => {
                 JsonConvert.DefaultSettings = () => new JsonSerializerSettings() { DateFormatString = "yyyy-MM-ddTHH:mm:ss" };
             });
-            
+
 
             //Singletons
             services.AddSingleton<IRetryPolicy, RetryPolicy>();
@@ -50,25 +50,18 @@ namespace Job_Bookings
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+
+            //need to add middleware for api key connection and ssl pass through
+
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
-            
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
             });
         }
     }
