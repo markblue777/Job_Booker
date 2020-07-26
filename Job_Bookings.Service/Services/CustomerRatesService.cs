@@ -1,5 +1,4 @@
-﻿using Job_Bookings.Services.Repos;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Job_Bookings.Services
 {

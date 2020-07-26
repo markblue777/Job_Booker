@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
 namespace Job_Bookings.API
@@ -23,6 +24,18 @@ namespace Job_Bookings.API
         {
             services.AddControllers().AddJsonOptions(op => {
                 JsonConvert.DefaultSettings = () => new JsonSerializerSettings() { DateFormatString = "yyyy-MM-ddTHH:mm:ss" };
+            });
+
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Job Booker API",
+                    Description = "",
+                    TermsOfService = new System.Uri("http://www.mandppcs.co.uk/ToS"),
+                    Contact = new OpenApiContact { Name = "Support", Email = "support@mandppcs.co.uk", Url = new System.Uri("http://www.mandppcs.co.uk/Support") },
+                    License = new OpenApiLicense { Name = "TBD", Url = new System.Uri("http://www.mandppcs.co.uk/Job_Booker_License") }
+                });
             });
 
 
@@ -49,6 +62,11 @@ namespace Job_Bookings.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
+                //enable middleware to serve generated swagger as JSON endpoint
+                app.UseSwagger();
+
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Job Booker API"));
             }
 
             //need to add middleware for api key connection and ssl pass through
