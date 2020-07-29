@@ -95,7 +95,7 @@ namespace Job_Bookings.Services
                 {
                     int recordsAffected = await cmd.ExecuteNonQueryAsync();
 
-                    return recordsAffected > 0 ? true : false;
+                    return recordsAffected > 0;
                 });
 
                 return rtnVal;

@@ -39,10 +39,11 @@ namespace Job_Bookings.Services
 
         public async Task<bool> AddCustomer(Customer cust)
         {
-            var sqlParams = new List<SqlParameter>();
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("json", JsonConvert.SerializeObject(cust))
+            };
 
-            sqlParams.Add(new SqlParameter("json", JsonConvert.SerializeObject(cust)));
-            
             var res = await ExecuteWriterAsync("dbo.AddCustomer", sqlParams);
             
             return res;

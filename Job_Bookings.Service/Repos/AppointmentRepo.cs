@@ -21,8 +21,11 @@ namespace Job_Bookings.Services
 
         public async Task<bool> AddAppointment(Appointment app)
         {
-            var sqlParams = new List<SqlParameter>();
-            sqlParams.Add(new SqlParameter() { ParameterName = "@json", Value = JsonConvert.SerializeObject(app) });
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter() { ParameterName = "@json", Value = JsonConvert.SerializeObject(app) }
+            };
+
             var res = await ExecuteWriterAsync("dbo.AddAppointment", sqlParams);
 
             return res;
@@ -30,18 +33,21 @@ namespace Job_Bookings.Services
 
         public async Task<bool> DeleteAppointment(Guid appointmentGuid)
         {
-            List<SqlParameter> sqlParameters = new List<SqlParameter>();
-
-            sqlParameters.Add(new SqlParameter { ParameterName = "@AppointmentGuid", Value = appointmentGuid.ToString() });
+            List<SqlParameter> sqlParameters = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@AppointmentGuid", Value = appointmentGuid.ToString() }
+            };
 
             return await ExecuteWriterAsync("dbo.DeleteAppointment", sqlParameters);
         }
 
         public async Task<Appointment> GetAppointment(Guid userGuid, Guid appointmentGuid)
         {
-            List<SqlParameter> sqlParameters = new List<SqlParameter>();
-            sqlParameters.Add(new SqlParameter { ParameterName = "@UserGuid", Value = userGuid.ToString() });
-            sqlParameters.Add(new SqlParameter { ParameterName = "@AppointmentGuid", Value = appointmentGuid.ToString() });
+            List<SqlParameter> sqlParameters = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@UserGuid", Value = userGuid.ToString() },
+                new SqlParameter { ParameterName = "@AppointmentGuid", Value = appointmentGuid.ToString() }
+            };
 
 
             return await ExecuteReaderAsync<Appointment>("dbo.GetAppointment", sqlParameters);
@@ -49,10 +55,12 @@ namespace Job_Bookings.Services
 
         public async Task<List<Appointment>> GetAppointments(Guid userGuid, DateTime? dateTime = null, bool dayOnly = false)
         {
-            List<SqlParameter> sqlParameters = new List<SqlParameter>();
-            sqlParameters.Add(new SqlParameter { ParameterName = "@AppointmentGuid", Value = userGuid.ToString() });
-            sqlParameters.Add(new SqlParameter { ParameterName = "@DateTime", Value = dateTime ?? null });
-            sqlParameters.Add(new SqlParameter { ParameterName = "@DayOnly", Value = dayOnly });
+            List<SqlParameter> sqlParameters = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@AppointmentGuid", Value = userGuid.ToString() },
+                new SqlParameter { ParameterName = "@DateTime", Value = dateTime ?? null },
+                new SqlParameter { ParameterName = "@DayOnly", Value = dayOnly }
+            };
 
 
             return await ExecuteReaderAsync<List<Appointment>>("dbo.GetAppointments", sqlParameters);
@@ -60,9 +68,10 @@ namespace Job_Bookings.Services
 
         public async Task<Appointment> UpdateAppointment(Appointment app)
         {
-            List<SqlParameter> sqlParameters = new List<SqlParameter>();
-
-            sqlParameters.Add(new SqlParameter { ParameterName = "@json", Value = JsonConvert.SerializeObject(app) });
+            List<SqlParameter> sqlParameters = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@json", Value = JsonConvert.SerializeObject(app) }
+            };
 
             var res = await ExecuteWriterAsync("dbo.UpdateAppointment", sqlParameters);
 

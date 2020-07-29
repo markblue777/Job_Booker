@@ -20,9 +20,10 @@ namespace Job_Bookings.Services
 
         public async Task<bool> AddUser(User user)
         {
-            var sqlParams = new List<SqlParameter>();
-
-            sqlParams.Add(new SqlParameter("json", JsonConvert.SerializeObject(user)));
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter("json", JsonConvert.SerializeObject(user))
+            };
 
             var res = await ExecuteWriterAsync("dbo.AddUser", sqlParams);
 
@@ -31,8 +32,10 @@ namespace Job_Bookings.Services
 
         public async Task<bool> DeleteUser(Guid userGuid)
         {
-            var sqlParams = new List<SqlParameter>();
-            sqlParams.Add(new SqlParameter { ParameterName = "@UserGuid", Value = userGuid.ToString() });
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@UserGuid", Value = userGuid.ToString() }
+            };
 
             var res = await ExecuteWriterAsync("dbo.DeleteUser", sqlParams);
 
@@ -41,9 +44,10 @@ namespace Job_Bookings.Services
 
         public async Task<User> GetUser(Guid userGuid)
         {
-            var sqlParams = new List<SqlParameter>();
-
-            sqlParams.Add(new SqlParameter { ParameterName = "@UserGuid", Value = userGuid.ToString() });
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@UserGuid", Value = userGuid.ToString() }
+            };
 
             var userRtn = await ExecuteReaderAsync<User>("dbo.GetUser", sqlParams);
 
@@ -61,9 +65,10 @@ namespace Job_Bookings.Services
 
         public async Task<User> UpdateUser(User user)
         {
-            var sqlParams = new List<SqlParameter>();
-
-            sqlParams.Add(new SqlParameter { ParameterName = "@json", Value = JsonConvert.SerializeObject(user) });
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@json", Value = JsonConvert.SerializeObject(user) }
+            };
 
             var res = await ExecuteWriterAsync("dbo.UpdateUser", sqlParams);
 

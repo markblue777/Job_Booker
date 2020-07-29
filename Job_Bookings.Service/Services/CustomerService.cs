@@ -9,7 +9,7 @@ namespace Job_Bookings.Services
 {
     public class CustomerService : BaseService<CustomerService>, ICustomerService
     {
-        ICustomerRepo _custRepo;        
+        readonly ICustomerRepo _custRepo;        
 
         public CustomerService(ICustomerRepo custRepo, ILogger<CustomerService> logger)
         {

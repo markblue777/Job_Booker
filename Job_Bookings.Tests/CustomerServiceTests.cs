@@ -17,7 +17,7 @@ namespace Job_Bookings.Tests
         readonly Mock<ILogger<CustomerService>> _loggerMock = new Mock<ILogger<CustomerService>>();
         readonly CustomerService _custService;
 
-        List<Customer> _customers = new List<Customer>();
+        readonly List<Customer> _customers = new List<Customer>();
 
         Guid _userOne, _userTwo, _userThree, _userInvalid;
 

@@ -9,7 +9,7 @@ namespace Job_Bookings.Services
 {
     public class AppointmentService : BaseService<AppointmentService>, IAppointmentService
     {
-        IAppointmentRepo _appointmentRepo;
+        readonly IAppointmentRepo _appointmentRepo;
 
         public AppointmentService(IAppointmentRepo appointmentRepo, ILogger<AppointmentService> logger)
         {

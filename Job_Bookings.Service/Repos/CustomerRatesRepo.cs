@@ -18,10 +18,12 @@ namespace Job_Bookings.Services
 
         }
 
-        public async Task<bool> AddCustomerRate(CustomerRate customerRate)
+        public async Task<bool> AddCustomerRate(Rate customerRate)
         {
-            List<SqlParameter> sqlParams = new List<SqlParameter>();
-            sqlParams.Add(new SqlParameter { ParameterName = "@json", Value = JsonConvert.SerializeObject(customerRate) });
+            List<SqlParameter> sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@json", Value = JsonConvert.SerializeObject(customerRate) }
+            };
 
             return await ExecuteWriterAsync("dbo.AddRate", sqlParams);
         }
