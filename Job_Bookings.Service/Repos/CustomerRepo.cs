@@ -27,7 +27,7 @@ namespace Job_Bookings.Services
         }
 
         public async Task<Customer> GetCustomer(Guid userGuid, Guid customerGuid) {
-            var sqlParams = new List<SqlParameter>() {
+            var sqlParams = new List<SqlParameter> {
                 new SqlParameter() { ParameterName ="@customerGuid", Value = customerGuid },
                 new SqlParameter() { ParameterName ="@UserGuid", Value = userGuid }
             };
@@ -40,6 +40,7 @@ namespace Job_Bookings.Services
         public async Task<bool> AddCustomer(Customer cust)
         {
             var sqlParams = new List<SqlParameter>();
+
             sqlParams.Add(new SqlParameter("json", JsonConvert.SerializeObject(cust)));
             
             var res = await ExecuteWriterAsync("dbo.AddCustomer", sqlParams);
@@ -47,7 +48,7 @@ namespace Job_Bookings.Services
             return res;
         }
 
-        public async Task<bool> RemoveCustomer(Customer cust)
+        public async Task<bool> RemoveCustomer(Guid userGuid, Guid customerGuid)
         {
             var sqlParams = new List<SqlParameter>();
 
@@ -63,7 +64,7 @@ namespace Job_Bookings.Services
             var res = await ExecuteWriterAsync("dbo.UpdateCustomer", sqlParams);
 
             if (!res)
-                _logger.LogWarning($"Type: {nameof(CustomerRepo)}, Failed to update customer: {cust.CustomerGuid}, for user: {cust.UserGuid}");
+                _logger.LogError($"Type: {nameof(CustomerRepo)}, Failed to update customer: {cust.CustomerGuid}, for user: {cust.UserGuid} - Session Id: { _sessionId }");
 
             return await GetCustomer(cust.UserGuid, cust.CustomerGuid);            
         }

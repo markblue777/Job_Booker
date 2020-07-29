@@ -43,16 +43,16 @@ namespace Job_Bookings.API
             services.AddSingleton<IRetryPolicy, RetryPolicy>();
 
             //Repos
-            services.AddTransient<ICustomerRepo, CustomerRepo>();
-            services.AddTransient<IAppointmentRepo, AppointmentRepo>();
-            services.AddTransient<ICustomerRatesRepo, CustomerRatesRepo>();
-            services.AddTransient<IUserRepo, UserRepo>();
+            services.AddScoped<ICustomerRepo, CustomerRepo>();
+            services.AddScoped<IAppointmentRepo, AppointmentRepo>();
+            services.AddScoped<ICustomerRatesRepo, CustomerRatesRepo>();
+            services.AddScoped<IUserRepo, UserRepo>();
 
             //Services
-            services.AddTransient<ICustomerService, CustomerService>();
-            services.AddTransient<IAppointmentService, AppointmentService>();
-            services.AddTransient<ICustomerRatesService, CustomerRatesService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ICustomerRatesService, CustomerRatesService>();
+            services.AddScoped<IUserService, UserService>();
 
         }
 

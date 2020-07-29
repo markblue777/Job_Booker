@@ -13,6 +13,7 @@
 	[timezone] [nvarchar](255) NULL,
 [firstname] NVARCHAR(50) NULL, 
     [lastname] NVARCHAR(50) NULL, 
+    [archived] BIT NOT NULL DEFAULT 0, 
     PRIMARY KEY CLUSTERED 
 (
 	[userId] ASC
