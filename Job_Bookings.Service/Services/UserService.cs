@@ -38,7 +38,7 @@ namespace Job_Bookings.Services
                 rtn.Message = "An error occured";
                 rtn.ReturnObject = false;
 
-                _logger.LogError($"An error occured in - {typeof(UserService)} - Message: {e.Message}");
+                _logger.LogError($"An error occured in - {typeof(UserService)} - Add User -  Message: {e.Message} - U: {user.UserGuid}");
             }
 
             return rtn;
@@ -51,8 +51,10 @@ namespace Job_Bookings.Services
             if (userGuid == null || userGuid == Guid.Empty)
             {
                 rtn.ErrorCode = ErrorCodes.USER_GUID_NOT_PROVIDED;
-                rtn.Message = "No user was provided";
+                rtn.Message = "No user guid was provided";
                 rtn.ReturnObject = null;
+
+                return rtn;
             }
 
             try { 
@@ -64,7 +66,7 @@ namespace Job_Bookings.Services
                 rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
-                _logger.LogError($"An error occured in - {nameof(UserService)} - Message: {e.Message}");
+                _logger.LogError($"An error occured in - {nameof(UserService)} - Get User - Message: {e.Message} - U: {userGuid}");
             }
 
             return rtn;
@@ -83,7 +85,7 @@ namespace Job_Bookings.Services
                 rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
-                _logger.LogError($"An error occured in - {nameof(UserService)} - Message: {e.Message}");
+                _logger.LogError($"An error occured in - {nameof(UserService)} - Get Users - Message: {e.Message}");
             }
 
             return rtn;
@@ -112,7 +114,7 @@ namespace Job_Bookings.Services
                 rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
-                _logger.LogError($"An error occured in - {nameof(UserService)} - Message: {e.Message}");
+                _logger.LogError($"An error occured in - {nameof(UserService)} - Update User - Message: {e.Message} - U: {user.UserGuid}");
             }
 
             return rtn;

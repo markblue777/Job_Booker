@@ -9,9 +9,9 @@ namespace Job_Bookings.Services
     public interface ICustomerService
     {
 
-        Task<List<Customer>> ListCustomers(Guid userGuid, bool onlyActive = true);
-        Task<Customer> GetCustomer(Guid userGuid, Guid customerGuid);
-        Task<bool> AddCustomer(Customer cust);
-        Task<Customer> UpdateCustomer(Customer cust);
+        Task<ReturnDto<List<Customer>>> ListCustomers(Guid userGuid, bool onlyActive = true);
+        Task<ReturnDto<Customer>> GetCustomer(Guid userGuid, Guid customerGuid);
+        Task<ReturnDto<bool>> AddCustomer(Customer cust);
+        Task<ReturnDto<Customer>> UpdateCustomer(Customer cust);
     }
 }

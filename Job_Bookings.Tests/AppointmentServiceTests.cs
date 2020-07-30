@@ -136,7 +136,7 @@ namespace Job_Bookings.Tests
 
             //Assert
             Assert.IsNotNull(res);
-            Assert.AreEqual(expectedRowReturn, res.Count);
+            Assert.AreEqual(expectedRowReturn, res.ReturnObject.Count);
         }
 
         [Test]
@@ -153,8 +153,8 @@ namespace Job_Bookings.Tests
 
             //Assert
             Assert.IsNotNull(res);
-            Assert.AreEqual(expectedRowReturn, res.Count);
-            Assert.IsTrue(res.Where(a => a.AppointmentGuid == _appointmentOne || a.AppointmentGuid == _appointmentTwo || a.AppointmentGuid == _appointmentThree).ToList().Count == expectedRowReturn);
+            Assert.AreEqual(expectedRowReturn, res.ReturnObject.Count);
+            Assert.IsTrue(res.ReturnObject.Where(a => a.AppointmentGuid == _appointmentOne || a.AppointmentGuid == _appointmentTwo || a.AppointmentGuid == _appointmentThree).ToList().Count == expectedRowReturn);
         }
 
         
@@ -173,8 +173,8 @@ namespace Job_Bookings.Tests
 
             //Assert
             Assert.IsNotNull(res);
-            Assert.AreEqual(expectedRowReturn, res.Count);
-            Assert.IsTrue(res.Where(a => a.AppointmentGuid == _appointmentOne || a.AppointmentGuid == _appointmentThree).ToList().Count == expectedRowReturn);
+            Assert.AreEqual(expectedRowReturn, res.ReturnObject.Count);
+            Assert.IsTrue(res.ReturnObject.Where(a => a.AppointmentGuid == _appointmentOne || a.AppointmentGuid == _appointmentThree).ToList().Count == expectedRowReturn);
         }
 
         [Test]
@@ -208,7 +208,7 @@ namespace Job_Bookings.Tests
             
             //Assert
             Assert.IsNotNull(res);
-            Assert.IsTrue(res);
+            Assert.IsTrue(res.ReturnObject);
             Assert.IsTrue(_appointments.Exists(predicate));
         }
 
@@ -265,7 +265,7 @@ namespace Job_Bookings.Tests
 
             //Assert
             Assert.IsNotNull(res);
-            Assert.AreEqual(appUpdate, res);
+            Assert.AreEqual(appUpdate, res.ReturnObject);
             //Assert.IsTrue(_appointments.Exists(predicate));
 
             Assert.IsFalse(_appointments.FirstOrDefault(a => a == appUpdate).AdditionalCosts == appOriginal.AdditionalCosts );
@@ -286,7 +286,7 @@ namespace Job_Bookings.Tests
             var res = await _appService.DeleteAppointment(appGuid);
 
             //Assert
-            Assert.IsTrue(res);
+            Assert.IsTrue(res.ReturnObject);
             Assert.IsTrue(_appointments.Where(a => a.AppointmentGuid == appGuid).FirstOrDefault().BookingCancelled);
         }
     }

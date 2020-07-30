@@ -1,5 +1,6 @@
 ﻿using Job_Bookings.Models;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace Job_Bookings.Services
@@ -27,7 +28,18 @@ namespace Job_Bookings.Services
                 return rtn;
             }
 
-            rtn.ReturnObject = await _customerRatesRepo.AddCustomerRate(customerRate);
+            try
+            {
+                rtn.ReturnObject = await _customerRatesRepo.AddCustomerRate(customerRate);
+            }
+            catch (Exception e) {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.Message = "An error occured";
+                rtn.ReturnObject = false;
+
+                _logger.LogError($"An error occured in - {typeof(CustomerRatesService)} - Add Customer Rate - Message: {e.Message} - R: {customerRate.RateGuid}, C: {customerRate.CustomerGuid}");
+            }
+
 
             return rtn;
         }

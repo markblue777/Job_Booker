@@ -11,6 +11,8 @@ namespace Job_Bookings.Models
         OBJECT_NOT_PROVIDED,
         [Description("Customer Guid not been provided.")]
         CUSTOMER_GUID_NOT_PROVIDED,
+        [Description("Reference Guids have not been provided.")]
+        REFERENCE_GUIDS_NOT_PROVIDED,
         [Description("User Guid not been provided.")]
         USER_GUID_NOT_PROVIDED,
         [Description("Appointment Guid not been provided.")]

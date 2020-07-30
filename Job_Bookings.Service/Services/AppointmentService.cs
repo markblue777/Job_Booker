@@ -17,9 +17,33 @@ namespace Job_Bookings.Services
             _logger = logger;
         }
 
-        public async Task<bool> AddAppointment(Appointment app)
+        public async Task<ReturnDto<bool>> AddAppointment(Appointment app)
         {
-            return await _appointmentRepo.AddAppointment(app);
+            var rtn = new ReturnDto<bool>();
+
+            if (app == null)
+            {
+                rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
+                rtn.Message = "Appointment has not been provided";
+                rtn.ReturnObject = false;
+
+                return rtn;
+            }
+
+            try
+            {
+                rtn.ReturnObject = await _appointmentRepo.AddAppointment(app);
+            }
+            catch (Exception e)
+            {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.Message = "An error occured";
+                rtn.ReturnObject = false;
+
+                _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Add Appointment - Message: {e.Message} - A: {app.AppointmentGuid}, U: {app.UserGuid}, C: {app.CustomerGuid}");
+            }
+
+            return rtn;
         }
 
         /// <summary>
@@ -28,24 +52,121 @@ namespace Job_Bookings.Services
         /// </summary>
         /// <param name="appGuid"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteAppointment(Guid appGuid)
+        public async Task<ReturnDto<bool>> DeleteAppointment(Guid appGuid)
         {
-            return await _appointmentRepo.DeleteAppointment(appGuid);
+            var rtn = new ReturnDto<bool>();
+
+            if (appGuid == null || appGuid == Guid.Empty)
+            {
+                rtn.ErrorCode = ErrorCodes.APPOINTMENT_GUID_NOT_PROVIDED;
+                rtn.Message = "Appointment guid has not been provided";
+                rtn.ReturnObject = false;
+
+                return rtn;
+            }
+
+            try
+            {
+                rtn.ReturnObject = await _appointmentRepo.DeleteAppointment(appGuid);
+            }
+            catch (Exception e) {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.Message = "An error occured";
+                rtn.ReturnObject = false;
+
+                _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Delete Appointment - Message: {e.Message} - A: {appGuid}");
+
+            }
+
+            return rtn;
         }
 
-        public async Task<List<Appointment>> GetAllAppointments(Guid userGuid)
+        public async Task<ReturnDto<List<Appointment>>> GetAllAppointments(Guid userGuid)
         {
-            return await _appointmentRepo.GetAppointments(userGuid: userGuid);
+            var rtn = new ReturnDto<List<Appointment>>();
+
+            if (userGuid == null || userGuid == Guid.Empty)
+            {
+                rtn.ErrorCode = ErrorCodes.APPOINTMENT_GUID_NOT_PROVIDED;
+                rtn.Message = "Appointment guid has not been provided";
+                rtn.ReturnObject = null;
+
+                return rtn;
+            }
+
+            try
+            {
+                rtn.ReturnObject = await _appointmentRepo.GetAppointments(userGuid: userGuid);
+            } catch (Exception e) {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.Message = "An error occured";
+                rtn.ReturnObject = null;
+
+                _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Get All Appointments - Message: {e.Message} - A: {userGuid}");
+
+            }
+
+            return rtn;
         }
 
-        public async Task<List<Appointment>> GetAppointmentsByDate(DateTime dt, Guid userGuid, bool dayOnly = false)
+        public async Task<ReturnDto<List<Appointment>>> GetAppointmentsByDate(DateTime dt, Guid userGuid, bool dayOnly = false)
         {
-            return await _appointmentRepo.GetAppointments(userGuid, dt, dayOnly);
+            var rtn = new ReturnDto<List<Appointment>>();
+
+            if (userGuid == null || userGuid == Guid.Empty)
+            {
+                rtn.ErrorCode = ErrorCodes.USER_GUID_NOT_PROVIDED;
+                rtn.Message = "User guid has not been provided";
+                rtn.ReturnObject = null;
+
+                return rtn;
+            }
+
+            try
+            {
+                rtn.ReturnObject =  await _appointmentRepo.GetAppointments(userGuid, dt, dayOnly);
+            }
+            catch (Exception e)
+            {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.Message = "An error occured";
+                rtn.ReturnObject = null;
+
+                _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Get Appointments By Date- Message: {e.Message} - DT: {dt}, U: {userGuid}, DO: {dayOnly}");
+
+            }
+
+            return rtn;
         }
 
-        public async Task<Appointment> UpdateAppointment(Appointment app)
+        public async Task<ReturnDto<Appointment>> UpdateAppointment(Appointment app)
         {
-            return await _appointmentRepo.UpdateAppointment(app);
+            var rtn = new ReturnDto<Appointment>();
+
+            if (app == null)
+            {
+                rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
+                rtn.Message = "Appointment has not been provided";
+                rtn.ReturnObject = null;
+
+                return rtn;
+            }
+
+            try
+            {
+                rtn.ReturnObject = await _appointmentRepo.UpdateAppointment(app);
+            }
+            catch (Exception e)
+            {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.Message = "An error occured";
+                rtn.ReturnObject = null;
+
+                _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Update Appointments - Message: {e.Message} - A: {app.AppointmentGuid}, U: {app.UserGuid}, C: {app.CustomerGuid}");
+
+            }
+
+            return rtn;
         }
     }
 }

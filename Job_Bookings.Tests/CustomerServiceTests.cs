@@ -83,8 +83,8 @@ namespace Job_Bookings.Tests
 
 
             //Assert
-            Assert.IsTrue(customersrtn.Count == 2);
-            Assert.IsNull(custRtnerr);
+            Assert.IsTrue(customersrtn.ReturnObject.Count == 2);
+            Assert.IsNull(custRtnerr.ReturnObject);
         }
         
         [Test]
@@ -99,7 +99,7 @@ namespace Job_Bookings.Tests
             var customer = await _custService.GetCustomer(userGuid, customerGuid);
             
             //Assert
-            Assert.AreEqual("Jimmy", customer.FirstName);
+            Assert.AreEqual("Jimmy", customer.ReturnObject.FirstName);
         }
 
         [Test]
@@ -125,7 +125,7 @@ namespace Job_Bookings.Tests
             var res = await _custService.AddCustomer(cust);
 
             //Assert
-            Assert.IsTrue(res);
+            Assert.IsTrue(res.ReturnObject);
             _customerRepoMock.Verify(x => x.AddCustomer(It.IsAny<Customer>()), Times.Once);
             
             //Act
@@ -193,10 +193,10 @@ namespace Job_Bookings.Tests
 
             //Assert
             Assert.IsNotNull(updatedCust);
-            Assert.AreEqual(custUpdated.FirstName, updatedCust.FirstName);
-            Assert.AreEqual(custUpdated.MobileNumber, updatedCust.MobileNumber);
-            Assert.AreEqual(custUpdated.MilesFromHomeBase, updatedCust.MilesFromHomeBase);
-            Assert.AreEqual(custUpdated.City, updatedCust.City);
+            Assert.AreEqual(custUpdated.FirstName, updatedCust.ReturnObject.FirstName);
+            Assert.AreEqual(custUpdated.MobileNumber, updatedCust.ReturnObject.MobileNumber);
+            Assert.AreEqual(custUpdated.MilesFromHomeBase, updatedCust.ReturnObject.MilesFromHomeBase);
+            Assert.AreEqual(custUpdated.City, updatedCust.ReturnObject.City);
 
             //Clean up
             _customers.Remove(_customers.FirstOrDefault(c => c.UserGuid == userGuid && c.CustomerGuid == custUpdated.CustomerGuid));
