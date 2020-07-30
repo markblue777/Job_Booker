@@ -22,7 +22,6 @@ namespace Job_Bookings.Services
             if (customerRate == null)
             {
                 rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
-                rtn.Message = "No customer rate was provided";
                 rtn.ReturnObject = false;
 
                 return rtn;
@@ -34,7 +33,6 @@ namespace Job_Bookings.Services
             }
             catch (Exception e) {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = false;
 
                 _logger.LogError($"An error occured in - {typeof(CustomerRatesService)} - Add Customer Rate - Message: {e.Message} - R: {customerRate.RateGuid}, C: {customerRate.CustomerGuid}");

@@ -23,7 +23,6 @@ namespace Job_Bookings.Services
             if (user == null)
             {
                 rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
-                rtn.Message = "No user was provided";
                 rtn.ReturnObject = false;
                 
                 return rtn;
@@ -35,7 +34,6 @@ namespace Job_Bookings.Services
             catch (Exception e)
             {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = false;
 
                 _logger.LogError($"An error occured in - {typeof(UserService)} - Add User -  Message: {e.Message} - U: {user.UserGuid}");
@@ -51,7 +49,6 @@ namespace Job_Bookings.Services
             if (userGuid == null || userGuid == Guid.Empty)
             {
                 rtn.ErrorCode = ErrorCodes.USER_GUID_NOT_PROVIDED;
-                rtn.Message = "No user guid was provided";
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -63,7 +60,6 @@ namespace Job_Bookings.Services
             catch (Exception e)
             {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {nameof(UserService)} - Get User - Message: {e.Message} - U: {userGuid}");
@@ -82,7 +78,6 @@ namespace Job_Bookings.Services
             catch (Exception e)
             {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {nameof(UserService)} - Get Users - Message: {e.Message}");
@@ -98,7 +93,6 @@ namespace Job_Bookings.Services
             if (user == null)
             {
                 rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
-                rtn.Message = "No user was provided";
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -111,7 +105,6 @@ namespace Job_Bookings.Services
             catch (Exception e)
             {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {nameof(UserService)} - Update User - Message: {e.Message} - U: {user.UserGuid}");

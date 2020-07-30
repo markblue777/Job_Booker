@@ -1,10 +1,12 @@
 ﻿using Job_Bookings.Models;
+using Job_Bookings.Models.Helper;
 using Job_Bookings.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -123,7 +125,7 @@ namespace Job_Bookings.Tests
 
         }
 
-            [Test]
+        [Test]
         public async Task AppointmentService_Get_Appointments_All_Test()
         {
             //arrange
@@ -138,6 +140,41 @@ namespace Job_Bookings.Tests
             Assert.IsNotNull(res);
             Assert.AreEqual(expectedRowReturn, res.ReturnObject.Count);
         }
+
+        [Test]
+        public async Task AppointmentService_Get_Appointments_All_Invalid_Guid_Test()
+        {
+            //arrange
+            Guid userGuid = _userOne;            
+            _appointmentMockRepo.Setup(x => x.GetAppointments(userGuid, null, false)).ReturnsAsync(_appointments.Where(a => a.UserGuid == userGuid).ToList());
+
+            //Act
+            var res = await _appService.GetAllAppointments(Guid.Empty);
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.USER_GUID_NOT_PROVIDED, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.USER_GUID_NOT_PROVIDED.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.GetAppointments(userGuid, null, false), Times.Never);
+        }
+
+        [Test]
+        public async Task AppointmentService_Get_Appointments_All_Repo_Exception_Test()
+        {
+            //arrange
+            Guid userGuid = _userOne;
+            _appointmentMockRepo.Setup(x => x.GetAppointments(userGuid, null, false)).ThrowsAsync(new Exception());
+
+            //Act
+            var res = await _appService.GetAllAppointments(userGuid);
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.GetAppointments(userGuid, null, false), Times.Once);
+        }
+
 
         [Test]
         public async Task AppointmentService_Get_Appointments_By_Date_For_A_Month_Test()
@@ -157,7 +194,43 @@ namespace Job_Bookings.Tests
             Assert.IsTrue(res.ReturnObject.Where(a => a.AppointmentGuid == _appointmentOne || a.AppointmentGuid == _appointmentTwo || a.AppointmentGuid == _appointmentThree).ToList().Count == expectedRowReturn);
         }
 
-        
+        [Test]
+        public async Task AppointmentService_Get_Appointments_By_Date_For_A_Month_Invalid_Guid_Test()
+        {
+            //arrange
+            DateTime dt = new DateTime(2020, 7, 6);
+            Guid userGuid = _userOne;
+            _appointmentMockRepo.Setup(x => x.GetAppointments(userGuid, dt, false)).ReturnsAsync(_appointments.Where(a => a.UserGuid == userGuid && (a.AppointmentDateTime.Month == dt.Month && a.AppointmentDateTime.Year == dt.Year)).ToList());
+
+            //Act
+            var res = await _appService.GetAppointmentsByDate(dt, Guid.Empty);
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.USER_GUID_NOT_PROVIDED, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.USER_GUID_NOT_PROVIDED.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.GetAppointments(userGuid, dt, false), Times.Never);
+        }
+
+        [Test]
+        public async Task AppointmentService_Get_Appointments_By_Date_For_A_Month_Repo_Expo_Test()
+        {
+            //arrange
+            DateTime dt = new DateTime(2020, 7, 6);
+            Guid userGuid = _userOne;
+            _appointmentMockRepo.Setup(x => x.GetAppointments(userGuid, dt, false)).ThrowsAsync(new Exception());
+
+            //Act
+            var res = await _appService.GetAppointmentsByDate(dt, userGuid);
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.GetAppointments(userGuid, dt, false), Times.Once);
+        }
+
+
         [Test]
         public async Task AppointmentService_Get_Appointments_By_Date_For_A_Day_Test()
         {
@@ -175,6 +248,45 @@ namespace Job_Bookings.Tests
             Assert.IsNotNull(res);
             Assert.AreEqual(expectedRowReturn, res.ReturnObject.Count);
             Assert.IsTrue(res.ReturnObject.Where(a => a.AppointmentGuid == _appointmentOne || a.AppointmentGuid == _appointmentThree).ToList().Count == expectedRowReturn);
+        }
+
+        [Test]
+        public async Task AppointmentService_Get_Appointments_By_Date_For_A_Day_Invalid_Guid_Test()
+        {
+            //Arrange
+            DateTime dt = new DateTime(2020, 7, 6);
+            Guid userGuid = _userOne;
+            
+
+            _appointmentMockRepo.Setup(x => x.GetAppointments(userGuid, dt, true)).ReturnsAsync(_appointments.Where(a => a.UserGuid == userGuid && a.AppointmentDateTime.Date == dt.Date).ToList());
+
+            //Act
+            var res = await _appService.GetAppointmentsByDate(dt, Guid.Empty, true);
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.USER_GUID_NOT_PROVIDED, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.USER_GUID_NOT_PROVIDED.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.GetAppointments(userGuid, dt, true), Times.Never);
+        }
+
+        [Test]
+        public async Task AppointmentService_Get_Appointments_By_Date_For_A_Day_Repo_Exception_Test()
+        {
+            //Arrange
+            DateTime dt = new DateTime(2020, 7, 6);
+            Guid userGuid = _userOne;
+
+            _appointmentMockRepo.Setup(x => x.GetAppointments(userGuid, dt, true)).ThrowsAsync(new Exception());
+
+            //Act
+            var res = await _appService.GetAppointmentsByDate(dt, userGuid, true);
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.GetAppointments(userGuid, dt, true), Times.Once);
         }
 
         [Test]
@@ -212,6 +324,42 @@ namespace Job_Bookings.Tests
             Assert.IsTrue(_appointments.Exists(predicate));
         }
 
+        [Test]
+        public async Task AppointmentService_Add_Appointment_Null_Object_Test()
+        {
+            Predicate<Appointment> predicate = delegate (Appointment a) { return (a.AppointmentGuid == _appointmentFour); };
+
+            //Arrange
+            Appointment app = null;
+            _appointmentMockRepo.Setup(x => x.AddAppointment(app)).Callback((Appointment app) => { _appointments.Add(app); }).ReturnsAsync(true);
+
+            //Act
+            var res = await _appService.AddAppointment(app);
+
+            //Assert
+            Assert.IsFalse(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED.GetDescription(), res.Message);
+        }
+
+        [Test]
+        public async Task AppointmentService_Add_Appointment_Repo_Exception_Test()
+        {
+            Predicate<Appointment> predicate = delegate (Appointment a) { return (a.AppointmentGuid == _appointmentFour); };
+
+            //Arrange
+            Appointment app = new Appointment();
+            _appointmentMockRepo.Setup(x => x.AddAppointment(app)).ThrowsAsync(new Exception());
+
+            //Act
+            var res = await _appService.AddAppointment(app);
+
+            //Assert
+            Assert.IsFalse(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.AddAppointment(app), Times.Once);
+        }
 
         [Test]
         public async Task AppointmentService_Update_Appointment_Test()
@@ -274,6 +422,37 @@ namespace Job_Bookings.Tests
         }
 
         [Test]
+        public async Task AppointmentService_Update_Appointment_Null_Object_Test()
+        {
+            //Arrange
+            _appointmentMockRepo.Setup(x => x.UpdateAppointment(It.IsAny<Appointment>())).ReturnsAsync(new Appointment());
+
+            //Act
+            var res = await _appService.UpdateAppointment(null);
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED.GetDescription(), res.Message);
+        }
+
+        [Test]
+        public async Task AppointmentService_Update_Appointment_Repo_Exception_Test()
+        {
+            //Arrange
+            _appointmentMockRepo.Setup(x => x.UpdateAppointment(It.IsAny<Appointment>())).ThrowsAsync(new Exception());
+
+            //Act
+            var res = await _appService.UpdateAppointment(new Appointment());
+
+            //Assert
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.UpdateAppointment(It.IsAny<Appointment>()), Times.Once);
+        }
+
+        [Test]
         public async Task AppointmentService_Delete_Appointment_Test()
         {
             //Arrange
@@ -288,6 +467,35 @@ namespace Job_Bookings.Tests
             //Assert
             Assert.IsTrue(res.ReturnObject);
             Assert.IsTrue(_appointments.Where(a => a.AppointmentGuid == appGuid).FirstOrDefault().BookingCancelled);
+        }
+
+        [Test]
+        public async Task AppointmentService_Delete_Appointment_Invalid_Guid_Test()
+        {
+            //Arrange
+            
+            //Act
+            var res = await _appService.DeleteAppointment(Guid.Empty);
+
+            //Assert
+            Assert.IsFalse(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.APPOINTMENT_GUID_NOT_PROVIDED, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.APPOINTMENT_GUID_NOT_PROVIDED.GetDescription(), res.Message);
+        }
+
+        [Test]
+        public async Task AppointmentService_Delete_Appointment_Repo_Exception_Test()
+        {
+            //Arrange
+            _appointmentMockRepo.Setup(x => x.DeleteAppointment(It.IsAny<Guid>())).ThrowsAsync(new Exception());
+            //Act
+            var res = await _appService.DeleteAppointment(Guid.NewGuid());
+
+            //Assert
+            Assert.IsFalse(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _appointmentMockRepo.Verify(x => x.DeleteAppointment(It.IsAny<Guid>()), Times.Once);
         }
     }
 }

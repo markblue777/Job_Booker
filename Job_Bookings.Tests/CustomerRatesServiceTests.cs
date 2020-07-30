@@ -1,4 +1,5 @@
 ﻿using Job_Bookings.Models;
+using Job_Bookings.Models.Helper;
 using Job_Bookings.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -41,7 +42,7 @@ namespace Job_Bookings.Tests
         }
 
         [Test]
-        public async Task CustomerRate_AddNewRate_ForNewCustomer() 
+        public async Task CustomerRate_Add_New_Rate_For_New_Customer_Test() 
         {
             //Arrange
             var custRate = new Rate { CustomerGuid = _custTwoGuid, HourlyRate = 34M, RateGuid = _rateTwoGuid, DateCreated = DateTime.UtcNow };
@@ -59,7 +60,7 @@ namespace Job_Bookings.Tests
 
 
         [Test]
-        public async Task CustomerRate_AddNewRate_ForExistingCustomer()
+        public async Task CustomerRate_Add_New_Rate_For_Existing_Customer_Test()
         {
             //Arrange
             var custRate = new Rate { CustomerGuid = _custOneGuid, HourlyRate = 34M, RateGuid = _rateTwoGuid, DateCreated = DateTime.UtcNow };
@@ -78,7 +79,7 @@ namespace Job_Bookings.Tests
         }
 
         [Test]
-        public async Task CustomerRate_NoObjectPass()
+        public async Task CustomerRate_No_Object_Pass_Test()
         {
             //Arrange
             Rate custRate = null;
@@ -91,6 +92,24 @@ namespace Job_Bookings.Tests
 
             //Assert
             Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED.GetDescription(), res.Message);
+            Assert.IsFalse(res.ReturnObject);
+            Assert.AreEqual(1, _customerRates.Count);
+        }
+
+        [Test]
+        public async Task CustomerRate_Repo_Exception_Pass()
+        {
+            //Arrange
+            Rate custRate = new Rate();
+            _customerRatesRepo.Setup(c => c.AddCustomerRate(custRate)).ThrowsAsync(new Exception());
+
+            //Act
+            var res = await _customerRatesService.AddCustomerRate(custRate);
+
+            //Assert
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
             Assert.IsFalse(res.ReturnObject);
             Assert.AreEqual(1, _customerRates.Count);
         }

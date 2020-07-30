@@ -7,6 +7,8 @@ namespace Job_Bookings.Models
 {
     public enum ErrorCodes
     {
+        [Description("")]
+        NONE,
         [Description("An Object has not been provided.")]
         OBJECT_NOT_PROVIDED,
         [Description("Customer Guid not been provided.")]

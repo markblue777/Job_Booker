@@ -24,8 +24,7 @@ namespace Job_Bookings.Services
 
             if (cust == null)
             {
-                rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
-                rtn.Message = "No customer was provided";
+                rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;                
                 rtn.ReturnObject = false;
 
                 return rtn;
@@ -36,7 +35,6 @@ namespace Job_Bookings.Services
                 rtn.ReturnObject = await _custRepo.AddCustomer(cust);
             } catch (Exception e) {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = false;
 
                 _logger.LogError($"An error occured in - {typeof(CustomerService)} - Add Customer - Message: {e.Message} - C: {cust.CustomerGuid}, U: {cust.UserGuid}");
@@ -52,7 +50,6 @@ namespace Job_Bookings.Services
             if (cust == null)
             {
                 rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
-                rtn.Message = "No customer was provided";
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -63,7 +60,6 @@ namespace Job_Bookings.Services
                 rtn.ReturnObject = await _custRepo.UpdateCustomer(cust);
             } catch (Exception e) {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {typeof(CustomerService)} - Update Customer - Message: {e.Message} - C: {cust.CustomerGuid}, U: {cust.UserGuid}");
@@ -79,7 +75,6 @@ namespace Job_Bookings.Services
             if (userGuid == null || userGuid == Guid.Empty || customerGuid == null || customerGuid == Guid.Empty)
             {
                 rtn.ErrorCode = ErrorCodes.REFERENCE_GUIDS_NOT_PROVIDED;
-                rtn.Message = "No user guid or customer guid was provided";
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -90,7 +85,6 @@ namespace Job_Bookings.Services
                 rtn.ReturnObject = await _custRepo.GetCustomer(userGuid, customerGuid);
             } catch (Exception e) {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {typeof(CustomerService)} - Get Customer - Message: {e.Message} - U: {userGuid} - C: {customerGuid}");
@@ -105,10 +99,9 @@ namespace Job_Bookings.Services
 
             //TODO: Should deal with limiting in the repo and underlining call to db to minimise data transfer
 
-            if (userGuid == null)
+            if (userGuid == null || userGuid == Guid.Empty)
             {
                 rtn.ErrorCode = ErrorCodes.USER_GUID_NOT_PROVIDED;
-                rtn.Message = "No user was provided";
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -121,7 +114,6 @@ namespace Job_Bookings.Services
             }
             catch (Exception e) {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {typeof(CustomerService)} - List Customers - Message: {e.Message} - U: {userGuid} - Active: {onlyActive}");

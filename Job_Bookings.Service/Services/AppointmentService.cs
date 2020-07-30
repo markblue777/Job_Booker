@@ -1,4 +1,6 @@
-﻿using Job_Bookings.Models;
+﻿using EnumsNET;
+using Job_Bookings.Models;
+using Job_Bookings.Services.Helper;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -24,7 +26,6 @@ namespace Job_Bookings.Services
             if (app == null)
             {
                 rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
-                rtn.Message = "Appointment has not been provided";
                 rtn.ReturnObject = false;
 
                 return rtn;
@@ -37,7 +38,6 @@ namespace Job_Bookings.Services
             catch (Exception e)
             {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = false;
 
                 _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Add Appointment - Message: {e.Message} - A: {app.AppointmentGuid}, U: {app.UserGuid}, C: {app.CustomerGuid}");
@@ -59,7 +59,6 @@ namespace Job_Bookings.Services
             if (appGuid == null || appGuid == Guid.Empty)
             {
                 rtn.ErrorCode = ErrorCodes.APPOINTMENT_GUID_NOT_PROVIDED;
-                rtn.Message = "Appointment guid has not been provided";
                 rtn.ReturnObject = false;
 
                 return rtn;
@@ -71,7 +70,6 @@ namespace Job_Bookings.Services
             }
             catch (Exception e) {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = false;
 
                 _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Delete Appointment - Message: {e.Message} - A: {appGuid}");
@@ -87,8 +85,7 @@ namespace Job_Bookings.Services
 
             if (userGuid == null || userGuid == Guid.Empty)
             {
-                rtn.ErrorCode = ErrorCodes.APPOINTMENT_GUID_NOT_PROVIDED;
-                rtn.Message = "Appointment guid has not been provided";
+                rtn.ErrorCode = ErrorCodes.USER_GUID_NOT_PROVIDED;
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -99,7 +96,6 @@ namespace Job_Bookings.Services
                 rtn.ReturnObject = await _appointmentRepo.GetAppointments(userGuid: userGuid);
             } catch (Exception e) {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Get All Appointments - Message: {e.Message} - A: {userGuid}");
@@ -116,7 +112,6 @@ namespace Job_Bookings.Services
             if (userGuid == null || userGuid == Guid.Empty)
             {
                 rtn.ErrorCode = ErrorCodes.USER_GUID_NOT_PROVIDED;
-                rtn.Message = "User guid has not been provided";
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -129,7 +124,6 @@ namespace Job_Bookings.Services
             catch (Exception e)
             {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Get Appointments By Date- Message: {e.Message} - DT: {dt}, U: {userGuid}, DO: {dayOnly}");
@@ -146,7 +140,6 @@ namespace Job_Bookings.Services
             if (app == null)
             {
                 rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
-                rtn.Message = "Appointment has not been provided";
                 rtn.ReturnObject = null;
 
                 return rtn;
@@ -159,7 +152,6 @@ namespace Job_Bookings.Services
             catch (Exception e)
             {
                 rtn.ErrorCode = ErrorCodes.OTHER;
-                rtn.Message = "An error occured";
                 rtn.ReturnObject = null;
 
                 _logger.LogError($"An error occured in - {typeof(AppointmentService)} - Update Appointments - Message: {e.Message} - A: {app.AppointmentGuid}, U: {app.UserGuid}, C: {app.CustomerGuid}");

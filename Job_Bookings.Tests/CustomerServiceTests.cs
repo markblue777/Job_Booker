@@ -74,19 +74,51 @@ namespace Job_Bookings.Tests
         {
             //Arrange
             var userGuid = _userTwo;
-            var invalidUserId = _userInvalid;
             _customerRepoMock.Setup(x => x.ListCustomers(userGuid)).ReturnsAsync(_customers.Where(c => c.UserGuid == userGuid).ToList());
 
             //Act
             var customersrtn = await _custService.ListCustomers(userGuid);
+            
+
+            //Assert
+            Assert.IsTrue(customersrtn.ReturnObject.Count == 2);            
+        }
+
+
+        [Test]
+        public async Task CustomerService_GetCustomerList_NoCustomer_In_repo_Test()
+        {
+            //Arrange
+            var userGuid = _userTwo;
+            var invalidUserId = _userInvalid;
+            _customerRepoMock.Setup(x => x.ListCustomers(userGuid)).ReturnsAsync(_customers.Where(c => c.UserGuid == userGuid).ToList());
+
+            //Act
             var custRtnerr = await _custService.ListCustomers(invalidUserId);
 
 
             //Assert
-            Assert.IsTrue(customersrtn.ReturnObject.Count == 2);
             Assert.IsNull(custRtnerr.ReturnObject);
         }
-        
+
+
+        [Test]
+        public async Task CustomerService_GetCustomerList_Invalid_Guid_Test()
+        {
+            //Arrange
+            var userGuid = _userTwo;
+            var invalidUserId = _userInvalid;
+            _customerRepoMock.Setup(x => x.ListCustomers(userGuid)).ReturnsAsync(_customers.Where(c => c.UserGuid == userGuid).ToList());
+
+            //Act
+            var custRtnerr = await _custService.ListCustomers(Guid.Empty);
+
+
+            //Assert
+            Assert.AreEqual(ErrorCodes.USER_GUID_NOT_PROVIDED, custRtnerr.ErrorCode);
+            Assert.IsNull(custRtnerr.ReturnObject);
+        }
+
         [Test]
         public async Task CustomerService_GetCustomer_Test() 
         {
@@ -100,6 +132,22 @@ namespace Job_Bookings.Tests
             
             //Assert
             Assert.AreEqual("Jimmy", customer.ReturnObject.FirstName);
+        }
+
+        [Test]
+        public async Task CustomerService_GetCustomer_Invalid_Guid_Test()
+        {
+            //Arrange
+            var userGuid = _userTwo;
+            var customerGuid = _customers[1].CustomerGuid;
+            _customerRepoMock.Setup(x => x.GetCustomer(userGuid, customerGuid)).ReturnsAsync(_customers.Where(c => c.UserGuid == userGuid && c.CustomerGuid == customerGuid).FirstOrDefault);
+
+            //Act
+            var customer = await _custService.GetCustomer(Guid.Empty, Guid.Empty);
+
+            //Assert
+            Assert.AreEqual(ErrorCodes.REFERENCE_GUIDS_NOT_PROVIDED, customer.ErrorCode);
+            Assert.IsNull(customer.ReturnObject);
         }
 
         [Test]
@@ -138,6 +186,22 @@ namespace Job_Bookings.Tests
 
             //Clean Up
             _customers.Remove(cust);
+        }
+
+        [Test]
+        public async Task CustomerService_AddCustomer_Null_Object_Test()
+        {
+            //Arrange            
+            Customer cust = null;
+            _customerRepoMock.Setup(x => x.AddCustomer(It.IsAny<Customer>())).Callback((Customer cust) => { _customers.Add(cust); }).ReturnsAsync(true);
+
+            //Act
+            var res = await _custService.AddCustomer(cust);
+
+            //Assert
+            Assert.IsFalse(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED, res.ErrorCode);
+            _customerRepoMock.Verify(x => x.AddCustomer(It.IsAny<Customer>()), Times.Never);
         }
 
         [Test]
@@ -192,7 +256,7 @@ namespace Job_Bookings.Tests
             var updatedCust = await _custService.UpdateCustomer(custUpdated);
 
             //Assert
-            Assert.IsNotNull(updatedCust);
+            Assert.IsNotNull(updatedCust.ReturnObject);
             Assert.AreEqual(custUpdated.FirstName, updatedCust.ReturnObject.FirstName);
             Assert.AreEqual(custUpdated.MobileNumber, updatedCust.ReturnObject.MobileNumber);
             Assert.AreEqual(custUpdated.MilesFromHomeBase, updatedCust.ReturnObject.MilesFromHomeBase);
@@ -200,6 +264,26 @@ namespace Job_Bookings.Tests
 
             //Clean up
             _customers.Remove(_customers.FirstOrDefault(c => c.UserGuid == userGuid && c.CustomerGuid == custUpdated.CustomerGuid));
+        }
+
+        [Test]
+        public async Task CustomerService_UpdateCustomer_Null_Object_Test()
+        {
+            //Arrange
+            Customer custOriginal = null;
+            
+            _customerRepoMock.Setup(x => x.UpdateCustomer(It.IsAny<Customer>())).Callback((Customer cust) =>
+            {
+                var customerIdx = _customers.FindIndex(c => c.UserGuid == cust.UserGuid && c.CustomerGuid == cust.CustomerGuid);
+                _customers[customerIdx] = cust;
+            }).ReturnsAsync(_customers.Where(c => c.UserGuid == custOriginal.UserGuid && c.CustomerGuid == custOriginal.CustomerGuid).FirstOrDefault);
+
+            //Act
+            var updatedCust = await _custService.UpdateCustomer(custOriginal);
+
+            //Assert
+            Assert.IsNull(updatedCust.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED, updatedCust.ErrorCode);
         }
     }
 }
