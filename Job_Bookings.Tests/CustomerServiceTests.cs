@@ -1,4 +1,5 @@
 using Job_Bookings.Models;
+using Job_Bookings.Models.Helper;
 using Job_Bookings.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -101,6 +102,23 @@ namespace Job_Bookings.Tests
             Assert.IsNull(custRtnerr.ReturnObject);
         }
 
+        [Test]
+        public async Task CustomerService_GetCustomerList_Repo_Exception_Test() 
+        {
+            //Arrange
+            var userGuid = _userTwo;
+            _customerRepoMock.Setup(x => x.ListCustomers(userGuid)).ThrowsAsync(new Exception());
+
+            //Act
+            var custRtnerr = await _custService.ListCustomers(userGuid);
+
+
+            //Assert
+            Assert.IsNull(custRtnerr.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, custRtnerr.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), custRtnerr.Message);
+            _customerRepoMock.Verify(x => x.ListCustomers(userGuid), Times.Once);
+        }
 
         [Test]
         public async Task CustomerService_GetCustomerList_Invalid_Guid_Test()
@@ -151,10 +169,49 @@ namespace Job_Bookings.Tests
         }
 
         [Test]
-        public async Task CustomerService_AddCustomer_Test() 
+        public async Task CustomerService_GetCustomer_Repo_Exception_Test()
+        {
+            //Arrange
+            var userGuid = _userTwo;
+            var customerGuid = _customers[1].CustomerGuid;
+            _customerRepoMock.Setup(x => x.GetCustomer(userGuid, customerGuid)).ThrowsAsync(new Exception());
+
+            //Act
+            var customer = await _custService.GetCustomer(userGuid, customerGuid);
+
+            //Assert
+            Assert.AreEqual(ErrorCodes.OTHER, customer.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), customer.Message);
+            Assert.IsNull(customer.ReturnObject);
+            _customerRepoMock.Verify(x => x.GetCustomer(userGuid, customerGuid), Times.Once);
+        }
+            
+        [Test]
+        public async Task CustomerService_AddCustomer_Repo_Exception_Test()
         {
             //Arrange            
-            var cust = new Customer() { FirstName = "Joe", LastName = "Bland", UserGuid = _userThree, CustomerGuid = new Guid("00491186-735B-4B78-AB42-B7D86A88E0CF"), 
+            _customerRepoMock.Setup(x => x.AddCustomer(It.IsAny<Customer>())).ThrowsAsync(new Exception());
+
+            //Act
+            var res = await _custService.AddCustomer(new Customer());
+
+            //Assert
+            Assert.IsFalse(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _customerRepoMock.Verify(x => x.AddCustomer(It.IsAny<Customer>()), Times.Once);
+        }
+
+        [Test]
+        public async Task CustomerService_AddCustomer_Test()
+        {
+            //Arrange            
+            var cust = new Customer()
+            {
+                FirstName = "Joe",
+                LastName = "Bland",
+                UserGuid = _userThree,
+                CustomerGuid = new Guid("00491186-735B-4B78-AB42-B7D86A88E0CF"),
                 AddressLine1 = "68 tilt st",
                 City = "climb",
                 County = "Turns",
@@ -163,19 +220,20 @@ namespace Job_Bookings.Tests
                 MilesFromHomeBase = 20.8,
                 MobileNumber = "01234567812",
                 PhoneNumber = "01234567813",
-                PostCode = "cl28 9zx" };
+                PostCode = "cl28 9zx"
+            };
 
             var userGuid = _userThree;
-            _customerRepoMock.Setup(x => x.AddCustomer(It.IsAny<Customer>())).Callback((Customer cust) => { _customers.Add(cust); } ).ReturnsAsync(true);
+            _customerRepoMock.Setup(x => x.AddCustomer(cust)).Callback((Customer cust) => { _customers.Add(cust); }).ReturnsAsync(true);
             _customerRepoMock.Setup(x => x.GetCustomer(userGuid, cust.CustomerGuid)).ReturnsAsync(_customers.Where(c => c.UserGuid == userGuid && c.CustomerGuid == cust.CustomerGuid).FirstOrDefault);
-           
+
             //Act
             var res = await _custService.AddCustomer(cust);
 
             //Assert
             Assert.IsTrue(res.ReturnObject);
-            _customerRepoMock.Verify(x => x.AddCustomer(It.IsAny<Customer>()), Times.Once);
-            
+            _customerRepoMock.Verify(x => x.AddCustomer(cust), Times.Once);
+
             //Act
             var custRes = await _custService.GetCustomer(userGuid, cust.CustomerGuid);
 
@@ -272,6 +330,26 @@ namespace Job_Bookings.Tests
             //Arrange
             Customer custOriginal = null;
             
+            _customerRepoMock.Setup(x => x.UpdateCustomer(It.IsAny<Customer>())).Callback((Customer cust) =>
+            {
+                var customerIdx = _customers.FindIndex(c => c.UserGuid == cust.UserGuid && c.CustomerGuid == cust.CustomerGuid);
+                _customers[customerIdx] = cust;
+            }).ReturnsAsync(_customers.Where(c => c.UserGuid == custOriginal.UserGuid && c.CustomerGuid == custOriginal.CustomerGuid).FirstOrDefault);
+
+            //Act
+            var updatedCust = await _custService.UpdateCustomer(custOriginal);
+
+            //Assert
+            Assert.IsNull(updatedCust.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED, updatedCust.ErrorCode);
+        }
+
+        [Test]
+        public async Task CustomerService_UpdateCustomer_Repo_Exception_Test()
+        {
+            //Arrange
+            Customer custOriginal = null;
+
             _customerRepoMock.Setup(x => x.UpdateCustomer(It.IsAny<Customer>())).Callback((Customer cust) =>
             {
                 var customerIdx = _customers.FindIndex(c => c.UserGuid == cust.UserGuid && c.CustomerGuid == cust.CustomerGuid);
