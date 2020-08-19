@@ -347,21 +347,18 @@ namespace Job_Bookings.Tests
         [Test]
         public async Task CustomerService_UpdateCustomer_Repo_Exception_Test()
         {
-            //Arrange
-            Customer custOriginal = null;
-
-            _customerRepoMock.Setup(x => x.UpdateCustomer(It.IsAny<Customer>())).Callback((Customer cust) =>
-            {
-                var customerIdx = _customers.FindIndex(c => c.UserGuid == cust.UserGuid && c.CustomerGuid == cust.CustomerGuid);
-                _customers[customerIdx] = cust;
-            }).ReturnsAsync(_customers.Where(c => c.UserGuid == custOriginal.UserGuid && c.CustomerGuid == custOriginal.CustomerGuid).FirstOrDefault);
+     
+            //Arrange            
+            _customerRepoMock.Setup(x => x.UpdateCustomer(It.IsAny<Customer>())).ThrowsAsync(new Exception());
 
             //Act
-            var updatedCust = await _custService.UpdateCustomer(custOriginal);
+            var res = await _custService.UpdateCustomer(new Customer());
 
             //Assert
-            Assert.IsNull(updatedCust.ReturnObject);
-            Assert.AreEqual(ErrorCodes.OBJECT_NOT_PROVIDED, updatedCust.ErrorCode);
+            Assert.IsNull(res.ReturnObject);
+            Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
+            Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
+            _customerRepoMock.Verify(x => x.UpdateCustomer(It.IsAny<Customer>()), Times.Once);
         }
     }
 }
