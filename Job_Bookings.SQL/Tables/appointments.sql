@@ -14,7 +14,8 @@
 	[appointmentGuid] [uniqueidentifier] NOT NULL,
 	[ratesId] [bigint] NOT NULL,
 	[expectedTotal] [money] NULL,
-PRIMARY KEY CLUSTERED 
+[appointmentTypesId] BIGINT NULL, 
+    PRIMARY KEY CLUSTERED 
 (
 	[appointmentId] ASC
 )

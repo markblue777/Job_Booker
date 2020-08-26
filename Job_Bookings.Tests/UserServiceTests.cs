@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -214,6 +215,16 @@ namespace Job_Bookings.Tests
             Assert.AreEqual(ErrorCodes.OTHER, res.ErrorCode);
             Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
             _userRepoMock.Verify(x => x.UpdateUser(user), Times.Once);
+        }
+
+
+        [Test]
+        public void User_Model_Check()
+        {
+            var t = typeof(User);
+
+            Assert.AreEqual(14, t.GetProperties().Count());
+
         }
     }
 }

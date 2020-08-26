@@ -77,7 +77,7 @@ namespace Job_Bookings.Tests
             Assert.AreEqual(2, _customerRates.Count);
             Assert.NotNull(_customerRates.FirstOrDefault(x => x.RateGuid == _rateOneGuid).DateUpdated);
         }
-
+        
         [Test]
         public async Task CustomerRate_No_Object_Pass_Test()
         {
@@ -112,6 +112,15 @@ namespace Job_Bookings.Tests
             Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
             Assert.IsFalse(res.ReturnObject);
             Assert.AreEqual(1, _customerRates.Count);
+        }
+
+        [Test]
+        public void CustomerRate_Model_Check()
+        {
+            var t = typeof(Rate);
+
+            Assert.AreEqual(6, t.GetProperties().Count());
+        
         }
     }
 }

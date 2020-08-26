@@ -16,7 +16,8 @@ AS
 	[ratesId],
 	[expectedTotal],
 	[dateCreated],
-	[dateUpdated]	
+	[dateUpdated],
+	[appointmentTypesId]
 	)
 	SELECT 
 		appointmentGuid,
@@ -32,7 +33,8 @@ AS
 		[dbo].[GetRateId](rateGuid),
 		[dbo].GeneratedExpectedTotal(AppointmentLength, MaterialCosts, AdditionalCosts, RateGuid),
 		dateCreated,
-		dateUpdated
+		dateUpdated,
+		[dbo].[GetAppointmentTypeId](AppointmentTypesGuid)
 	FROM OPENJSON(@json)
 	WITH (
 		AppointmentGuid UNIQUEIDENTIFIER,
@@ -48,6 +50,7 @@ AS
 		RateGuid UNIQUEIDENTIFIER,
 		ExpectedTotal MONEY,
 		DateCreated DATETIME,
-		DateUpdated DATETIME
+		DateUpdated DATETIME,
+		AppointmentTypesGuid  UNIQUEIDENTIFIER
 	)
 RETURN

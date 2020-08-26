@@ -360,5 +360,14 @@ namespace Job_Bookings.Tests
             Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
             _customerRepoMock.Verify(x => x.UpdateCustomer(It.IsAny<Customer>()), Times.Once);
         }
+
+        [Test]
+        public void Customer_Model_Check()
+        {
+            var t = typeof(Customer);
+
+            Assert.AreEqual(16, t.GetProperties().Count());
+
+        }
     }
 }

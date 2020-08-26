@@ -84,6 +84,9 @@
     <Build Include="Tables\customrLogin.sql" />
     <Build Include="Tables\userLogin.sql" />
     <Build Include="Tables\appointmentTypes.sql" />
+    <Build Include="Tables\expenses.sql" />
+    <Build Include="Functions\GetAppointmentTypeId.sql" />
+    <Build Include="Stored Procedures\AddUser.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Job_Bookings.SQL.refactorlog" />

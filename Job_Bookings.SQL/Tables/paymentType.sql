@@ -2,8 +2,8 @@
 	[paymentTypeId] [bigint] IDENTITY(1,1) NOT NULL,
 	[name] [nvarchar](50) NOT NULL,
 	[paymentTypeGuid] [uniqueidentifier] NOT NULL,
-[dateCreated] DATETIME NULL, 
-    [dateUpdated] DATETIME NULL, 
+	[datecreated] DATETIME NULL, 
+    [dateupdated] DATETIME NULL, 
     PRIMARY KEY CLUSTERED 
 (
 	[paymentTypeId] ASC

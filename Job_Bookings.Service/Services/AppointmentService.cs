@@ -1,10 +1,7 @@
-﻿using EnumsNET;
-using Job_Bookings.Models;
-using Job_Bookings.Services.Helper;
+﻿using Job_Bookings.Models;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Job_Bookings.Services

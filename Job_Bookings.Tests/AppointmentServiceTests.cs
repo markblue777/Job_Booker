@@ -497,5 +497,12 @@ namespace Job_Bookings.Tests
             Assert.AreEqual(ErrorCodes.OTHER.GetDescription(), res.Message);
             _appointmentMockRepo.Verify(x => x.DeleteAppointment(It.IsAny<Guid>()), Times.Once);
         }
+
+        [Test]
+        public void AppointmentModel_PropertyNumber_Check() {
+            var t = typeof(Appointment);
+
+            Assert.AreEqual(15, t.GetProperties().Count());
+        }
     }
 }

@@ -25,5 +25,6 @@ namespace Job_Bookings.Models
         public bool BookingCancelled { get; set; }
         public Guid RateGuid { get; set; }
         public decimal ExpectedTotal { get; set; }
+        public Guid AppointmentTypesGuid { get; set; }
     }
 }
