@@ -27,5 +27,15 @@ namespace Job_Bookings.Services
 
             return await ExecuteWriterAsync("dbo.AddRate", sqlParams);
         }
+
+        public async Task<List<Rate>> GetCustomerRate(Guid customerGuid)
+        {
+            List<SqlParameter> sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@guid", Value = customerGuid}
+            };
+
+            return await ExecuteReaderAsync<List<Rate>>("dbo.GetCustomerRates", sqlParams);
+        }
     }
 }

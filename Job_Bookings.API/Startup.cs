@@ -7,6 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace Job_Bookings.API
 {
@@ -23,7 +27,8 @@ namespace Job_Bookings.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddJsonOptions(op => {
-                JsonConvert.DefaultSettings = () => new JsonSerializerSettings() { DateFormatString = "yyyy-MM-ddTHH:mm:ss" };
+                JsonConvert.DefaultSettings = () => new JsonSerializerSettings() { DateFormatString = "yyyy-MM-ddTHH:mm:ss"  };
+                op.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
             });
 
             services.AddSwaggerGen(c => {
@@ -36,6 +41,9 @@ namespace Job_Bookings.API
                     Contact = new OpenApiContact { Name = "Support", Email = "support@mandppcs.co.uk", Url = new System.Uri("http://www.mandppcs.co.uk/Support") },
                     License = new OpenApiLicense { Name = "TBD", Url = new System.Uri("http://www.mandppcs.co.uk/Job_Booker_License") }
                 });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
 

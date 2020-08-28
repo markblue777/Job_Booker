@@ -9,5 +9,6 @@ namespace Job_Bookings.Services
     public interface ICustomerRatesRepo
     {
         Task<bool> AddCustomerRate(Rate customerRate);
+        Task<List<Rate>> GetCustomerRate(Guid customerGuid);
     }   
 }

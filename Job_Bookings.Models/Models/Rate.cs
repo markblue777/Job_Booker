@@ -8,7 +8,9 @@ namespace Job_Bookings.Models
 {
     public class Rate : BaseModel
     {
-        public Rate() : base() { }
+        public Rate() : base() {
+            RateGuid = Guid.NewGuid();
+        }
 
         public Guid RateGuid { get; set; }
         public bool IsActive { get; set; }

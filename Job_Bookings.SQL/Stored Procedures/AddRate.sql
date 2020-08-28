@@ -26,7 +26,9 @@ AS
 	SELECT TOP 1 @customerId = CustomerId FROM #TempCustomerRate ORDER BY dateCreated DESC
 
 	--update a customers old active rate 
-	UPDATE customerrates SET dateupdated = GETUTCDATE()  where customerId = @customerId AND dateupdated IS NULL
+	
+	UPDATE customerrates SET dateupdated = (select datecreated from #TempCustomerRate)  where customerId = @customerId AND dateupdated IS NULL
+
 
 	--insert the customers new rate
 

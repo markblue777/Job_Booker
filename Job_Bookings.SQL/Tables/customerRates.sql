@@ -8,7 +8,8 @@
 PRIMARY KEY CLUSTERED 
 (
 	[ratesId] ASC
-)
+), 
+    CONSTRAINT [UC_CustomerRates_RatesGuid] UNIQUE ([rateGuid])
 ) ON [PRIMARY]
 GO
 
