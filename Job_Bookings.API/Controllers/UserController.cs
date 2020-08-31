@@ -27,9 +27,14 @@ namespace Job_Bookings.API.Controllers
         /// <param name="userGuid"></param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get([FromQuery] Guid userGuid)
+        public async Task<IActionResult> Get([FromQuery] Guid userGuid)
         {
-            return Ok("User Get");
+            var res = await _userService.GetUser(userGuid);
+
+            if (res.ErrorCode != ErrorCodes.NONE)
+                return BadRequest(res);
+
+            return Ok(res);
         }
 
         /// <summary>
@@ -38,8 +43,13 @@ namespace Job_Bookings.API.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Post([FromBody] User user) {
-            return Ok("User Post");
+        public async Task<IActionResult> Post([FromBody] User user) {
+            var res = await _userService.AddUser(user);
+
+            if (res.ErrorCode != ErrorCodes.NONE)
+                return BadRequest(res);
+
+            return Ok(res);
         }
 
         /// <summary>
@@ -48,16 +58,26 @@ namespace Job_Bookings.API.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPut]
-        public IActionResult Put([FromBody] User user) {
-            return Ok("User Update");
+        public async Task<IActionResult> Put([FromBody] User user) {
+            var res = await _userService.UpdateUser(user);
+
+            if (res.ErrorCode != ErrorCodes.NONE)
+                return BadRequest(res);
+
+            return Ok(res);
         }
         
         /// <summary>
         /// Deletes a customer, This is a soft delete of the user and it anonymises user data for compliance to GDPR. It is a private API that is not exposed for general use
         /// </summary>
         [HttpDelete]
-        public IActionResult Delete([FromQuery] Guid userGuid) {
-            return Ok("User Delete");
+        public async Task<IActionResult> Delete([FromQuery] Guid userGuid) {
+            var res = await _userService.RemoveUser(userGuid);
+
+            if (res.ErrorCode != ErrorCodes.NONE)
+                return BadRequest(res);
+
+            return Ok(res);
         }
     }
 }

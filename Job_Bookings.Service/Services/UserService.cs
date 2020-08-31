@@ -112,5 +112,39 @@ namespace Job_Bookings.Services
 
             return rtn;
         }
+
+        public async Task<ReturnDto<bool>> RemoveUser(Guid userGuid, bool cleanseUser = false)
+        {
+            var rtn = new ReturnDto<bool>();
+
+            if (userGuid == null || userGuid == Guid.Empty)
+            {
+                rtn.ErrorCode = ErrorCodes.USER_GUID_NOT_PROVIDED;
+                rtn.ReturnObject = false;
+
+                return rtn;
+            }
+
+            try {
+
+                rtn.ReturnObject = await _userRepo.DeleteUser(userGuid);
+            }
+            catch (Exception e)
+            {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.ReturnObject = false;
+
+                _logger.LogError($"An error occured in - {nameof(UserService)} - Remove User - Message: {e.Message} - U: {userGuid}, CU: {cleanseUser}");
+            }
+
+            //someones sub may laps so we do not want to wipe them from the system fully all the time. This option is used when fully deleting when complying with a 'Rrequest To Delete'
+            if (cleanseUser)
+            { 
+                //cleanse the user data to annonymise it to comply with GDPR
+            }
+
+
+            return rtn;
+        }
     }
 }
