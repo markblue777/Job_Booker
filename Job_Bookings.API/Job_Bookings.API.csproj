@@ -12,7 +12,7 @@
 
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <DocumentationFile>bin\$(Configuration)\Job_Bookings.API.xml</DocumentationFile>
   </PropertyGroup>
 
