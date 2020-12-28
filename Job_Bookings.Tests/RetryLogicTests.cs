@@ -12,17 +12,18 @@ using System.Threading.Tasks;
 namespace Job_Bookings.Tests
 {
 
-    class RetryLogicTests
+    public class RetryLogicTests
     {
-        Mock<IConfiguration> _configurationMock = new Mock<IConfiguration>();
+        readonly Mock<IConfiguration> _configurationMock = new Mock<IConfiguration>();
         //Mock<IRetryPolicy> _retryPolicyMock = new Mock<IRetryPolicy>();
-        Mock<ILogger<RetryPolicy>> _logger = new Mock<ILogger<RetryPolicy>>();
+        readonly Mock<ILogger<RetryPolicy>> _logger = new Mock<ILogger<RetryPolicy>>();
 
-        Mock<ICustomerRepo> _custRepo = new Mock<ICustomerRepo>();
-        IRetryPolicy _retryPolicy;
+        private readonly Mock<Func<Guid, Task<Customer>>> _repo = new Mock<Func<Guid, Task<Customer>>>();
 
-        int retryAttemps = 3;
-        int retryDelay = 10;
+        readonly IRetryPolicy _retryPolicy;
+
+        readonly int retryAttemps = 3;
+        readonly int retryDelay = 10;
 
         public RetryLogicTests()
         {
@@ -46,11 +47,10 @@ namespace Job_Bookings.Tests
             //Arrange
             Customer cust = new Customer();
             Guid customerGuid = Guid.NewGuid();
-            Guid userGuid = Guid.NewGuid();
-            _custRepo.Setup(x => x.GetCustomer(userGuid, customerGuid)).ReturnsAsync(cust);
-            
+            _repo.Setup(p => p(It.IsAny<Guid>())).ReturnsAsync(cust);
+
             //Act
-            var res = await _retryPolicy.Do(() => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); });
+            var res = await _retryPolicy.Do(() => { return _repo.Object(customerGuid); });
 
             //Assert
 
@@ -62,16 +62,16 @@ namespace Job_Bookings.Tests
         {
             //Arrange
             Customer cust = new Customer();
-            Guid customerGuid = Guid.NewGuid();
-            Guid userGuid = Guid.NewGuid();
-            _custRepo.SetupSequence(x => x.GetCustomer(userGuid, customerGuid)).ThrowsAsync(new Exception()).ThrowsAsync(new Exception()).ReturnsAsync(cust);
+            Guid customerGuid = Guid.NewGuid();            
+            _repo.SetupSequence(p => p(It.IsAny<Guid>())).ThrowsAsync(new Exception()).ThrowsAsync(new Exception()).ReturnsAsync(cust);
+
 
             //Act
-            var res = await _retryPolicy.Do(() => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); });
+            var res = await _retryPolicy.Do(() => { return _repo.Object(customerGuid); });
 
             //Assert
             Assert.IsNotNull(res);
-            _custRepo.Verify(x => x.GetCustomer(userGuid, customerGuid), Times.Exactly(3));
+            _repo.Verify(x => x(customerGuid), Times.Exactly(3)); 
 
 
         }
@@ -82,17 +82,16 @@ namespace Job_Bookings.Tests
             //Arrange
             Guid customerGuid = Guid.NewGuid();
             Guid userGuid = Guid.NewGuid();
-            //do this but change return so it just sends back sql exceptions
-            _custRepo.Setup(x => x.GetCustomer(userGuid, customerGuid)).ThrowsAsync(new Exception());
-            
+            _repo.Setup(p => p(It.IsAny<Guid>())).ThrowsAsync(new Exception());
+
             //Act
-            var res = await _retryPolicy.Do(() => { return _custRepo.Object.GetCustomer(userGuid, customerGuid); });
+            var res = await _retryPolicy.Do(() => { return _repo.Object(customerGuid);});
 
             //Assert
             Assert.IsNull(res);
             
             //it does the initial call, then 3 retries
-            _custRepo.Verify(x => x.GetCustomer(userGuid, customerGuid), Times.Exactly(retryAttemps+1));
+            _repo.Verify(x => x(customerGuid), Times.Exactly(retryAttemps + 1));
         }
 
     }

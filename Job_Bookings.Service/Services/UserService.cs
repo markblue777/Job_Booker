@@ -146,5 +146,32 @@ namespace Job_Bookings.Services
 
             return rtn;
         }
+
+        public async Task<ReturnDto<bool>> ChangePassword(Guid userGuid, string password) 
+        {
+            var rtn = new ReturnDto<bool>();
+
+            if (string.IsNullOrEmpty(password) || (userGuid == null || userGuid == Guid.Empty))
+            {
+                rtn.ErrorCode = ErrorCodes.OBJECT_NOT_PROVIDED;
+                rtn.ReturnObject = false;
+
+                return rtn;
+            }
+
+            try
+            {
+                rtn.ReturnObject = await _userRepo.ChangePassword(userGuid, password);
+            }
+            catch (Exception e)
+            {
+                rtn.ErrorCode = ErrorCodes.OTHER;
+                rtn.ReturnObject = false;
+
+                _logger.LogError($"An error occured in - {nameof(UserService)} - Update User - Message: {e.Message} - U: {userGuid}");
+            }
+
+            return rtn;
+        }
     }
 }

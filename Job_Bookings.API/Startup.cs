@@ -1,5 +1,9 @@
 using Job_Bookings.Services;
 using Job_Bookings.Services.Helper;
+using Job_Bookings.Services.Repos;
+using Job_Bookings.Services.Repos.Interfaces;
+using Job_Bookings.Services.Services;
+using Job_Bookings.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -55,12 +59,14 @@ namespace Job_Bookings.API
             services.AddScoped<IAppointmentRepo, AppointmentRepo>();
             services.AddScoped<ICustomerRatesRepo, CustomerRatesRepo>();
             services.AddScoped<IUserRepo, UserRepo>();
+            services.AddScoped<IUserLoginRepo, UserLoginRepo>();
 
             //Services
             services.AddScoped<ICustomerService, CustomerService>();
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<ICustomerRatesService, CustomerRatesService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserLoginService, UserLoginService>();
 
         }
 
@@ -78,6 +84,7 @@ namespace Job_Bookings.API
             }
 
             //need to add middleware for api key connection and ssl pass through
+            //JWT key for login
 
             app.UseHttpsRedirection();
 

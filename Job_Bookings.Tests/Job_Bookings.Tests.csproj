@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Job_Bookings\Job_Bookings.csproj" />
+    <ProjectReference Include="..\Job_Bookings\Job_Bookings.FrontEnd.csproj" />
   </ItemGroup>
 
 </Project>

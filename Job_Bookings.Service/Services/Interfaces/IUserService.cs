@@ -13,6 +13,6 @@ namespace Job_Bookings.Services
         Task<ReturnDto<User>> UpdateUser(User user);
         Task<ReturnDto<User>> GetUser(Guid userGuid);
         Task<ReturnDto<List<User>>> GetUsers();
-
+        Task<ReturnDto<bool>> ChangePassword(Guid userGuid, string password);
     }
 }

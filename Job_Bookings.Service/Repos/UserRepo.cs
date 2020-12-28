@@ -78,5 +78,17 @@ namespace Job_Bookings.Services
 
             return await GetUser(user.UserGuid);
         }
+
+        public async Task<bool> ChangePassword(Guid userGuid, string password)
+        {
+            var sqlParams = new List<SqlParameter>
+            {
+                new SqlParameter { ParameterName = "@password", Value = password }
+            };
+
+            var res = await ExecuteWriterAsync("dbo.UpdatePassword", sqlParams);
+
+            return res;
+        }
     }
 }

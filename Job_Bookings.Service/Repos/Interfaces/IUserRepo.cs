@@ -42,6 +42,8 @@ namespace Job_Bookings.Services
         /// <returns></returns>
         Task<bool> DeleteUser(Guid userGuid);
 
+        Task<bool> ChangePassword(Guid userGuid, string password);
+
 
     }
 }
