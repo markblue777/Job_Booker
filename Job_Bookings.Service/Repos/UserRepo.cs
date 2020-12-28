@@ -83,6 +83,7 @@ namespace Job_Bookings.Services
         {
             var sqlParams = new List<SqlParameter>
             {
+                new SqlParameter { ParameterName = "@userGuid", Value = userGuid },
                 new SqlParameter { ParameterName = "@password", Value = password }
             };
 
